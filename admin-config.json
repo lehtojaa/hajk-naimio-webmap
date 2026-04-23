@@ -1,0 +1,5 @@
+{
+  "language": "en",
+  "proxyBase": "/api/v2/proxy?url=",
+  "mapserviceBase": "/api/v2"
+}

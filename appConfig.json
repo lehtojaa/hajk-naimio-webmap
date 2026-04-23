@@ -1,0 +1,4 @@
+{
+  "language": "en",
+  "mapserviceBase": "http://localhost:1337/api/v2"
+}

@@ -1,0 +1,43 @@
+services:
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: spatial-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: hajk_data
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  geoserver:
+    image: oscarfonts/geoserver:latest
+    container_name: geoserver
+    environment:
+      - INSTALL_EXTENSIONS=true
+      - STABLE_EXTENSIONS=postgres-ql-plugin
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - geoserver-data:/var/local/geoserver
+
+hajk:
+    image: hallbergs/hajk:latest
+    container_name: hajk-map-service
+    ports:
+      - "1337:3002"
+    depends_on:
+      - geoserver
+    volumes:
+      - hajk-data:/usr/app/App_Data
+      # This line below is the "Magic" that changes the language:
+      - ./admin-config.json:/usr/app/apps/admin/build/config.json
+    restart: always
+    
+# volumes:
+#  pgdata:
+#  geoserver-data:
+#  hajk-data:

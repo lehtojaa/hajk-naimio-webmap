@@ -1,18 +1,25 @@
-version: '3.8'
-
 services:
-  hajk:
+  db:
+    image: postgis/postgis:15-3.3
+    # ... rest of db config
+
+  geoserver:
+    image: oscarfonts/geoserver:latest
+    # ... rest of geoserver config
+
+  hajk:  # <--- This must be indented exactly like 'db' and 'geoserver'
     image: hallbergs/hajk:latest
     container_name: hajk-map-service
     ports:
-      - "1337:3002"  # Host Port : Container Port
-    environment:
-      - NODE_ENV=production
-      # You can add AD/LDAP variables here if needed
+      - "1337:3002"
+    depends_on:
+      - geoserver
     volumes:
       - hajk-data:/usr/app/App_Data
+      - ./admin-config.json:/usr/app/apps/admin/build/config.json
     restart: always
 
 volumes:
+  pgdata:
+  geoserver-data:
   hajk-data:
-    driver: local
