@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  hajk:
+    image: hallbergs/hajk:latest
+    container_name: hajk-map-service
+    ports:
+      - "1337:3002"  # Host Port : Container Port
+    environment:
+      - NODE_ENV=production
+      # You can add AD/LDAP variables here if needed
+    volumes:
+      - hajk-data:/usr/app/App_Data
+    restart: always
+
+volumes:
+  hajk-data:
+    driver: local
